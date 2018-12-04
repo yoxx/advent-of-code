@@ -15,7 +15,7 @@ class Y2018D3 extends Day
         /**
          * Read puzzle input
          */
-        $handle = fopen($this->input_file, "r");
+        $handle = fopen($this->input_file, "rb");
         if ($handle) {
             while (($line = fgets($handle)) !== false) {
                 $parsed_input = $this->parseInputToArray($line);

@@ -1,6 +1,8 @@
 # Advent-Of-Code
-Repo for my advent of code tries
+Advent of Code is an Advent calendar of small programming puzzles for a variety of 
+skill sets and skill levels that can be solved in any programming language you like.
 
 For more information about the advent of code see https://adventofcode.com
 
 ## 2018
+* First started with the Advent of Code
