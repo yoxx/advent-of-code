@@ -7,7 +7,7 @@ use yoxx\Advent\Day;
 
 class Y2018D1 extends Day
 {
-    public function run(OutputInterface $output): void
+    public function run(OutputInterface $output, int $part): void
     {
         $this->runAssignment1($output);
         $this->runAssignment2($output);
@@ -17,7 +17,7 @@ class Y2018D1 extends Day
     {
         $freq = 0;
         $count = 0;
-        $handle = fopen($this->input_file, "r");
+        $handle = fopen($this->input_file, "rb");
         if ($handle) {
             while (($line = fgets($handle)) !== false) {
                 $freq += (int) $line;

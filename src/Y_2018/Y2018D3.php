@@ -7,7 +7,7 @@ use yoxx\Advent\Day;
 
 class Y2018D3 extends Day
 {
-    public function run(OutputInterface $output): void
+    public function run(OutputInterface $output, int $part): void
     {
         $all_input = [];
         $virtual_fabric = [];

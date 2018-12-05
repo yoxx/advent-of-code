@@ -6,3 +6,6 @@ For more information about the advent of code see https://adventofcode.com
 
 ## 2018
 * First started with the Advent of Code
+
+## Todo
+* Allow a way to concurrently calculate solutions

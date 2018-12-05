@@ -8,7 +8,7 @@ abstract class Day
 {
     protected $input_file;
 
-    abstract public function run(OutputInterface $output);
+    abstract public function run(OutputInterface $output, int $part);
 
     public function setInput(string $input_file): void
     {

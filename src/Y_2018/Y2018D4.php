@@ -7,7 +7,7 @@ use yoxx\Advent\Day;
 
 class Y2018D4 extends Day
 {
-    public function run(OutputInterface $output): void
+    public function run(OutputInterface $output, int $part): void
     {
         // Part 1
         $original_input = $this->readAssignment($output);
@@ -33,7 +33,7 @@ class Y2018D4 extends Day
     private function readAssignment(OutputInterface $logger): array
     {
         $original_input = [];
-        $handle = fopen($this->input_file, "r");
+        $handle = fopen($this->input_file, "rb");
         if ($handle) {
             while (($line = fgets($handle)) !== false) {
                 $original_input[] = $this->parseForSort($line);

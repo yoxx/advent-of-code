@@ -7,10 +7,10 @@ use yoxx\Advent\Day;
 
 class Y2018D2 extends Day
 {
-    public function run(OutputInterface $output): void
+    public function run(OutputInterface $output, int $part): void
     {
         $input = [];
-        $handle = fopen($this->input_file, "r");
+        $handle = fopen($this->input_file, "rb");
         $string_length = null;
         if ($handle) {
             $two_count = 0;
