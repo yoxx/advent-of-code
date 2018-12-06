@@ -9,6 +9,9 @@ use yoxx\Advent\Utils;
 
 class Y2018D5 extends Day
 {
+    /**
+     * TODO perhaps do this assignment with str_replace since that seems faster
+     */
     public function run(OutputInterface $logger, int $part): void
     {
         // Part 1
