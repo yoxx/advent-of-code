@@ -21,7 +21,8 @@ class RunAssignmentCommand extends Command
         $this->setDescription('Run assignment from adventofcode.com')
             ->addOption("day", "d", InputOption::VALUE_REQUIRED)
             ->addOption("year", "y", InputOption::VALUE_REQUIRED)
-            ->addOption("part", "p", InputOption::VALUE_REQUIRED);
+            ->addOption("part", "p", InputOption::VALUE_REQUIRED)
+            ->addOption("test", "t", InputOption::VALUE_NONE);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -80,7 +81,12 @@ class RunAssignmentCommand extends Command
         $class = "yoxx\Advent\Y_" . $year . "\Y" . $year . "D" . $day;
         /** @var Day $assignment */
         $assignment = new $class();
-        $assignment->setInput(__DIR__ . "/../../input_files/Y_" . $year . "/Day" . $day . ".txt");
+
+        if ($input->getOption("test")) {
+            $assignment->setInput(__DIR__ . "/../../input_files/Y_" . $year . "/Day" . $day . "_test.txt");
+        } else {
+            $assignment->setInput(__DIR__ . "/../../input_files/Y_" . $year . "/Day" . $day . ".txt");
+        }
         $assignment->run($output, $part);
     }
 }

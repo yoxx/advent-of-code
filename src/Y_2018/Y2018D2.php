@@ -55,7 +55,6 @@ class Y2018D2 extends Day
 
     private function countIfXLetters(array $string_array, int $string_length, int $expected): bool
     {
-
         foreach( $string_array as $char) {
             $char_count = 0;
             for ($count = 0; $count < $string_length; $count++) {
