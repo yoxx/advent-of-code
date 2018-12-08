@@ -12,18 +12,18 @@ class Y2018D8 extends Day
     public function run(OutputInterface $logger, int $part): void
     {
         $formatted_input = $this->getFormattedInput($logger);
-        // First we gather all the nodes
-        $nodes = $this->findInnerNodes($formatted_input);
 
         if ($part === RunAssignmentCommand::RUN_PART_1 || $part === RunAssignmentCommand::RUN_PART_ALL) {
+            // First we gather all the nodes
+            $nodes = $this->findInnerNodes($formatted_input);
             // Then we add up all the metadata entries
             $sum = $this->calcSumMetadata($nodes);
             $logger->writeln("The sum of the metadata: " . $sum);
         }
 
         if ($part === RunAssignmentCommand::RUN_PART_2 || $part === RunAssignmentCommand::RUN_PART_ALL) {
-            $node_with_headers = $this->findHeaderAndChildren($nodes, $formatted_input);
-//            $logger->writeln("Amount of area points that can reach all positions under 10000 steps: " . $area_under_10000_steps);
+            $root = $this->readNode($formatted_input,0);
+            $logger->writeln("Root value: " . $root["metadata_value"]);
         }
     }
 
@@ -73,14 +73,9 @@ class Y2018D8 extends Day
                     $amount_metadata = (int) $full_input[$index + 1];
                     $node["node_string_length"] = 2 + $amount_metadata;
                     $node["header"] = [$full_input[$index],$full_input[$index + 1]];
-                    $node["metadata"] = [];
+                    $node["metadata"] = \array_slice($full_input,$index + 2, $node["header"][1]);
 
                     for ($nindex = $index; $nindex <= ($index + 1 + $amount_metadata); $nindex++) {
-                        // Grab the metadata
-                        if ($nindex > $index+1) {
-                            $node["metadata"][] = (int) $full_input[$nindex];
-                        }
-
                         // Unset this from the array
                         unset($full_input[$nindex]);
                     }
@@ -110,57 +105,56 @@ class Y2018D8 extends Day
         return $output;
     }
 
-    private function findHeaderAndChildren(array $nodes, array $original_input): array
+    /**
+     * Read the nodes (again) this time from start to end...
+     * Return the root node and his children and the metadata_value...
+     */
+    private function readNode(array $original_input, int $offset): array
     {
-        /**
-         * We already know all the nodes in this array... however we need to find the correct link
-         */
-        $output = [];
+        // Get the header info
+        $node["header"] = [(int) $original_input[$offset], (int) $original_input[$offset + 1]];
 
-        $done = false;
-        while(!$done) {
-            $length = \count($original_input);
-            for ($index = 0; $index < $length; $index += 2) {
-                // found the most inner node
-                if ((int) $original_input[$index] === 0) {
-                    $amount_metadata = (int) $original_input[$index + 1];
-                    $node["node_string_length"] = 2 + $amount_metadata;
-                    $node["header"] = [$original_input[$index], $original_input[$index + 1]];
-                    $node["metadata"] = [];
+        // start size of 2 since we did the header
+        $size = 2;
 
-                    for ($nindex = $index; $nindex <= ($index + 1 + $amount_metadata); $nindex++) {
-                        // Grab the metadata
-                        if ($nindex > $index + 1) {
-                            $node["metadata"][] = (int) $original_input[$nindex];
-                        }
+        // Time to look for the children
+        $children=[];
+        for($count = 0;$count < $node["header"][0]; $count++){
+            $children[$count] = $this->readNode($original_input, $offset + $size);
+            $size += $children[$count]['size'];
+        }
 
-                        // Unset this from the array
-                        unset($original_input[$nindex]);
-                    }
+        // Fill node with info
+        $node['size'] = $size + $node["header"][1];
+        $node['index'] = $offset;
+        $node['children'] = $children;
+        $node["metadata"] = \array_slice($original_input,$offset + $size, $node["header"][1]);
 
-                    // Change the header before this to show we have taken away a child node but only if this is not the last node!
-                    if ($index !== 0) {
-                        $node["parent_header"] = [$original_input[$index - 2], $original_input[$index - 1]];
-                        $full_input[$index - 2] = (int) $original_input[$index - 2] - 1;
-                    } else {
-                        $node["parent_header"] = [];
-                    }
+        // Check for children and calculate the metadatavalue for this
+        if(\count($children) === 0){
+            $node['metadata_value'] = \array_sum($node["metadata"]);
+        }else{
+            $value_from_children = 0;
+            foreach($node["metadata"] as $meta){
+                // The metadata value is the index of the child. However it starts counting at 1 instead of 0
+                $index = (int) $meta - 1;
 
-                    // Save the node to our output
-                    $output[] = $node;
-                    break;
+                // If the index is larger than 0 and makes sense (aka the child array has a key for that)
+                if($index >= 0 && \array_key_exists($index, $children)) {
+                    $value_from_children += $children[$index]['metadata_value'];
                 }
             }
-
-            // Reset the array
-            $full_input = array_values($full_input);
-
-            if (\count($full_input) === 0) {
-                $done = true;
-            }
+            // Save the values
+            $node['metadata_value'] = $value_from_children;
         }
+
+        // return the node
+        return $node;
     }
 
+    /**
+     * Calculate the total sum of metadata for the nodes
+     */
     private function calcSumMetadata($nodes): int
     {
         $total_sum = 0;
