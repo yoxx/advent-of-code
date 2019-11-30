@@ -23,7 +23,7 @@ class DownloadInputCommand extends Command
             ->addOption("force", "f", InputOption::VALUE_NONE);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln("Downloading AdventOfCode-Input");
         // Check if the input is an int and is a number ranging from 2000-2099 and not above our current year.
@@ -32,7 +32,7 @@ class DownloadInputCommand extends Command
             // Check the input
             if (!preg_match("/^(20)\d{2}$/", $year)){
                 $output->writeln("<error>You can only enter an integer as year, this must be a year ranging 2000-2099 but not above your current year!</error>");
-                return;
+                return 0;
             }
             // Make sure we are not going over the current year
             if ($year > (int) date("Y")) {
@@ -49,12 +49,12 @@ class DownloadInputCommand extends Command
             // Check the input
             if (!preg_match("/^([1-9]|1[0-9]|2[0-5])$/", $day)) {
                 $output->writeln("<error>You can only enter an integer as day, this must be a day ranging 1-25!</error>");
-                return;
+                return 0;
             }
             // Make sure the day is not over the current day
             if ($year === (int) date("Y") && $day > (int) date("j")) {
                 $output->writeln("<error>You cannot get the input of tomorrow</error>");
-                return;
+                return 0;
             }
         } else {
             // Get the current day as int
@@ -69,7 +69,7 @@ class DownloadInputCommand extends Command
 
         // Store our file if the file does not already exist
         if (!file_exists($filename) || $input->getOption("force")) {
-            // Check if the year dear exists
+            // Check if the year dir exists
             $foldername = __DIR__ . "/../../input_files/Y_" . $year;
             if (!is_dir($foldername)) {
                 mkdir($foldername, 0775);
@@ -93,7 +93,7 @@ class DownloadInputCommand extends Command
             }
         } else {
             $output->writeln("<error>File: " . $filename . " already exists! If you want to override this file use --force</error>");
-            return;
+            return 0;
         }
     }
 }

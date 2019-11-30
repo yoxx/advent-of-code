@@ -2,6 +2,7 @@
 
 namespace yoxx\Advent\ConsoleCommands;
 
+use Error;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -25,7 +26,7 @@ class RunAssignmentCommand extends Command
             ->addOption("test", "t", InputOption::VALUE_NONE);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption("year")) {
             $year = (int) $input->getOption("year");
@@ -33,7 +34,7 @@ class RunAssignmentCommand extends Command
             if (!preg_match("/^(20)\d{2}$/", $year)) {
                 $output->writeln("<error>You can only enter an integer as year, this must be a year ranging 2000-2099 but not above your current year!</error>");
 
-                return;
+                return 0;
             }
             // Make sure we are not going over the current year
             if ($year > (int) date("Y")) {
@@ -51,13 +52,13 @@ class RunAssignmentCommand extends Command
             if (!preg_match("/^([1-9]|1[0-9]|2[0-5])$/", $day)) {
                 $output->writeln("<error>You can only enter an integer as day, this must be a day ranging 1-25!</error>");
 
-                return;
+                return 0;
             }
             // Make sure the day is not over the current day
             if ($year === (int) date("Y") && $day > (int) date("j")) {
                 $output->writeln("<error>You cannot get the input of tomorrow</error>");
 
-                return;
+                return 0;
             }
         } else {
             // Get the current day as int
@@ -65,6 +66,12 @@ class RunAssignmentCommand extends Command
             // If the day is larger than 25 we set it to 25 (the puzzel never goes after day 25)
             if ($day > 25) {
                 $day = 25;
+            }
+
+            // Sanity check for the month
+            if (date("m") !== 12) {
+                $output->writeln("<error>You currently execute this outside of the advent of code timeframe. Please include options like -y for year and -d for day</error>");
+                return 0;
             }
         }
 
@@ -74,13 +81,18 @@ class RunAssignmentCommand extends Command
             if (!preg_match("/^([1-9])$/", $part)) {
                 $output->writeln("<error>You can only enter an integer ranging 0-2, 0 for all or 1,2 for part 1 or 2</error>");
 
-                return;
+                return 0;
             }
         }
 
-        $class = "yoxx\Advent\Y_" . $year . "\Y" . $year . "D" . $day;
-        /** @var Day $assignment */
-        $assignment = new $class();
+        try {
+            $class = "yoxx\Advent\Y_" . $year . "\Y" . $year . "D" . $day;
+            /** @var Day $assignment */
+            $assignment = new $class();
+        } catch (Error $e) {
+            $output->writeln("<error>This assignment is not found. Please create it first... assignment: Y:(" . $year . ") D: (" . $day . ")</error>");
+            return 0;
+        }
 
         if ($input->getOption("test")) {
             $assignment->setInput(__DIR__ . "/../../input_files/Y_" . $year . "/Day" . $day . "_test.txt");

@@ -1,5 +1,5 @@
 {
-    "name": "yoxx/Advent",
+    "name": "yoxx/advent",
     "description": "Advent Of Code",
     "license": "MIT",
     "authors": [
@@ -9,12 +9,12 @@
         }
     ],
     "require": {
-        "php": "^7.1",
-        "symfony/console": "^4.2"
+        "php": "^7.4",
+        "symfony/console": "^5.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
-        "symfony/dotenv": "^4.2"
+        "symfony/dotenv": "^5.0"
     },
     "autoload": {
         "psr-4": {"yoxx\\Advent\\": "src/"}
