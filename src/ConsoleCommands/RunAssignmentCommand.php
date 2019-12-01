@@ -69,7 +69,7 @@ class RunAssignmentCommand extends Command
             }
 
             // Sanity check for the month
-            if (date("m") !== 12) {
+            if (date("m") != 12) {
                 $output->writeln("<error>You currently execute this outside of the advent of code timeframe. Please include options like -y for year and -d for day</error>");
                 return 0;
             }
@@ -91,6 +91,7 @@ class RunAssignmentCommand extends Command
             $assignment = new $class();
         } catch (Error $e) {
             $output->writeln("<error>This assignment is not found. Please create it first... assignment: Y:(" . $year . ") D: (" . $day . ")</error>");
+            $output->writeln("<error>" . $e->getMessage() ."</error>");
             return 0;
         }
 
@@ -99,6 +100,8 @@ class RunAssignmentCommand extends Command
         } else {
             $assignment->setInput(__DIR__ . "/../../input_files/Y_" . $year . "/Day" . $day . ".txt");
         }
+
         $assignment->run($output, $part);
+        return 0;
     }
 }

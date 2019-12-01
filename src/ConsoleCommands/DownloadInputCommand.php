@@ -32,7 +32,7 @@ class DownloadInputCommand extends Command
             // Check the input
             if (!preg_match("/^(20)\d{2}$/", $year)){
                 $output->writeln("<error>You can only enter an integer as year, this must be a year ranging 2000-2099 but not above your current year!</error>");
-                return 0;
+                return 1;
             }
             // Make sure we are not going over the current year
             if ($year > (int) date("Y")) {
@@ -49,12 +49,12 @@ class DownloadInputCommand extends Command
             // Check the input
             if (!preg_match("/^([1-9]|1[0-9]|2[0-5])$/", $day)) {
                 $output->writeln("<error>You can only enter an integer as day, this must be a day ranging 1-25!</error>");
-                return 0;
+                return 1;
             }
             // Make sure the day is not over the current day
             if ($year === (int) date("Y") && $day > (int) date("j")) {
                 $output->writeln("<error>You cannot get the input of tomorrow</error>");
-                return 0;
+                return 1;
             }
         } else {
             // Get the current day as int
@@ -85,15 +85,15 @@ class DownloadInputCommand extends Command
             );
 
             $context = stream_context_create($options);
-
             if (file_put_contents($filename, file_get_contents("https://adventofcode.com/" . $year . "/day/" . $day . "/input", false, $context))) {
                 $output->writeln("<info>File: " . $filename . " downloaded successfully</info>");
             } else {
-                $output->writeln("<info>File could not be saved please save the file manually</info>");
+                $output->writeln("<info>File could not be saved please save the file manually, perhaps your session_key was not correct?</info>");
             }
         } else {
             $output->writeln("<error>File: " . $filename . " already exists! If you want to override this file use --force</error>");
             return 0;
         }
+        return 1;
     }
 }
