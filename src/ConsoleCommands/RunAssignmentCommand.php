@@ -2,6 +2,7 @@
 
 namespace yoxx\Advent\ConsoleCommands;
 
+use DateTime;
 use Error;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -78,7 +79,7 @@ class RunAssignmentCommand extends Command
         $part = 0;
         if ($input->getOption("part")) {
             $part = $input->getOption("part");
-            if (!preg_match("/^([1-9])$/", $part)) {
+            if (!preg_match("/^([0-2])$/", $part)) {
                 $output->writeln("<error>You can only enter an integer ranging 0-2, 0 for all or 1,2 for part 1 or 2</error>");
 
                 return 0;
@@ -101,7 +102,15 @@ class RunAssignmentCommand extends Command
             $assignment->setInput(__DIR__ . "/../../input_files/Y_" . $year . "/Day" . $day . ".txt");
         }
 
+        $starttime = new DateTime();
+        $output->writeln($starttime->format("Y-m-d H:i:s") . ": Running: Y" . $year . "D" . $day);
+
         $assignment->run($output, $part);
+
+        $endtime = new DateTime();
+        $interval = $starttime->diff($endtime);
+        $timediff =  $interval->format('%h')." Hours ".$interval->format('%i')." Minutes ".$interval->format('%s')." Seconds ".((int) $interval->format("%f") / 1000)." Miliseconds";
+        $output->writeln($endtime->format("Y-m-d H:i:s") . ": Assignment finished took " . $timediff);
         return 0;
     }
 }
