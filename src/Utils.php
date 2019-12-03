@@ -6,6 +6,12 @@ use Symfony\Component\Dotenv\Dotenv;
 
 class Utils
 {
+    public static function memoryIntensive1G(): void
+    {
+        // This function is mempry intesive upping memory to 1G
+        ini_set('memory_limit', '1G');
+    }
+
     /**
      * Function to retrieve values from our .env file
      */
