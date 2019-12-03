@@ -9,22 +9,6 @@ use yoxx\Advent\Day;
 
 class Y2019D2 extends Day
 {
-    public function run(OutputInterface $output, int $part): void
-    {
-        switch($part) {
-            case 1:
-                $this->runAssignment1($output);
-                break;
-            case 2:
-                $this->runAssignment2($output);
-                break;
-            default:
-                $this->runAssignment1($output);
-                $this->runAssignment2($output);
-        }
-
-    }
-
     public function runAssignment1(OutputInterface $output): void
     {
         $opcode_cache = [];

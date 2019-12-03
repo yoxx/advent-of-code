@@ -102,15 +102,16 @@ class RunAssignmentCommand extends Command
             $assignment->setInput(__DIR__ . "/../../input_files/Y_" . $year . "/Day" . $day . ".txt");
         }
 
-        $starttime = new DateTime();
-        $output->writeln($starttime->format("Y-m-d H:i:s") . ": Running: Y" . $year . "D" . $day);
+        $tz = new \DateTimeZone("Europe/Amsterdam");
+        $starttime = new DateTime("now", $tz);
+        $output->writeln("<fg=cyan>" . $starttime->format("Y-m-d H:i:s") . ": Running: Y" . $year . "D" . $day . "</>");
 
         $assignment->run($output, $part);
 
-        $endtime = new DateTime();
+        $endtime = new DateTime("now", $tz);
         $interval = $starttime->diff($endtime);
         $timediff =  $interval->format('%h')." Hours ".$interval->format('%i')." Minutes ".$interval->format('%s')." Seconds ".((int) $interval->format("%f") / 1000)." Miliseconds";
-        $output->writeln($endtime->format("Y-m-d H:i:s") . ": Assignment finished took " . $timediff);
+        $output->writeln("<fg=cyan>" .$endtime->format("Y-m-d H:i:s") . ": Assignment finished took " . $timediff . "</>");
         return 0;
     }
 }
