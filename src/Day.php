@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace yoxx\Advent;
 
@@ -7,10 +7,12 @@ use yoxx\Advent\ConsoleCommands\RunAssignmentCommand;
 
 abstract class Day
 {
-    protected $input_file;
+    protected string $input_file;
+    protected bool $test = false;
 
-    public function run(OutputInterface $output, int $part): void
+    public function run(OutputInterface $output, int $part, bool $test): void
     {
+        $this->test = $test;
         switch($part) {
             case RunAssignmentCommand::RUN_PART_1:
                 $this->runAssignment1($output);

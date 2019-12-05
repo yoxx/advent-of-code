@@ -22,13 +22,7 @@ class Y2019D2 extends Day
             $opcode_cache[1] = 12;
             $opcode_cache[2] = 2;
 
-            $instructionset_length = \count($opcode_cache);
-            for ($opcode = 0; $opcode < $instructionset_length; $opcode += 4) {
-                if ($opcode_cache[$opcode] === 99) {
-                    break;
-                }
-                $opcode_cache = $this->handleOpcode($opcode_cache, $opcode_cache[$opcode], $opcode_cache[$opcode + 1], $opcode_cache[$opcode + 2], $opcode_cache[$opcode + 3]);
-            }
+            $opcode_cache = Y2019Utils::runOpcode($opcode_cache, $output);
 
             $output->writeln("P1: The result in \$opcode_cache is: " . $opcode_cache[0]);
 
@@ -56,13 +50,8 @@ class Y2019D2 extends Day
                     $opcode_cache[1] = $noun;
                     $opcode_cache[2] = $verb;
                     // Get the lenght
-                    $instructionset_length = \count($opcode_cache);
-                    for ($opcode = 0; $opcode < $instructionset_length; $opcode += 4) {
-                        if ($opcode_cache[$opcode] === 99) {
-                            break;
-                        }
-                        $opcode_cache = $this->handleOpcode($opcode_cache, $opcode_cache[$opcode], $opcode_cache[$opcode + 1], $opcode_cache[$opcode + 2], $opcode_cache[$opcode + 3]);
-                    }
+                    $opcode_cache = Y2019Utils::runOpcode($opcode_cache, $output);
+
                     if ($opcode_cache[0] === 19690720) {
                         break 2;
                     }
@@ -76,28 +65,5 @@ class Y2019D2 extends Day
         } else {
             $output->writeln("Error reading line input from file");
         }
-    }
-
-    /**
-     * @throws Error
-     */
-    private function handleOpcode(array $opcode_cache, int $opcode, int $val1, int $val2, int $target): array
-    {
-        switch($opcode) {
-            case 1:
-                $opcode_cache[$target] = $opcode_cache[$val1] + $opcode_cache[$val2];
-                break;
-            case 2:
-                $opcode_cache[$target] = $opcode_cache[$val1] * $opcode_cache[$val2];
-                break;
-            case 99:
-                throw new Error("Halt Program");
-                break;
-            default:
-                throw new Error("Undefined opcode encountered: " . $opcode);
-                break;
-        }
-
-        return $opcode_cache;
     }
 }

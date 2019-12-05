@@ -98,15 +98,17 @@ class RunAssignmentCommand extends Command
 
         if ($input->getOption("test")) {
             $assignment->setInput(__DIR__ . "/../../input_files/Y_" . $year . "/Day" . $day . "_test.txt");
+            $test = true;
         } else {
             $assignment->setInput(__DIR__ . "/../../input_files/Y_" . $year . "/Day" . $day . ".txt");
+            $test = false;
         }
 
         $tz = new \DateTimeZone("Europe/Amsterdam");
         $starttime = new DateTime("now", $tz);
         $output->writeln("<fg=cyan>" . $starttime->format("Y-m-d H:i:s") . ": Running: Y" . $year . "D" . $day . "</>");
 
-        $assignment->run($output, $part);
+        $assignment->run($output, $part, $test);
 
         $endtime = new DateTime("now", $tz);
         $interval = $starttime->diff($endtime);
