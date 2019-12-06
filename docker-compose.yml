@@ -1,6 +1,6 @@
 version: "3.7"
 services:
-  php-cli:
+  advent-php:
     build:
       dockerfile: Dockerfile
       context: .
@@ -9,7 +9,7 @@ services:
       PHP_IDE_CONFIG: "serverName=advent-of-code"
     volumes:
       - .:/opt/project
-  composer:
+  advent-composer:
     build:
       dockerfile: Dockerfile
       context: .

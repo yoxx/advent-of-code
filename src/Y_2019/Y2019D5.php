@@ -56,27 +56,4 @@ class Y2019D5 extends Day
             $output->writeln("Error reading line input from file");
         }
     }
-
-    /**
-     * @throws Error
-     */
-    private function handleOpcode(array $opcode_cache, int $opcode, int $val1, int $val2, int $target): array
-    {
-        switch($opcode) {
-            case 1:
-                $opcode_cache[$target] = $opcode_cache[$val1] + $opcode_cache[$val2];
-                break;
-            case 2:
-                $opcode_cache[$target] = $opcode_cache[$val1] * $opcode_cache[$val2];
-                break;
-            case 99:
-                throw new Error("Halt Program");
-                break;
-            default:
-                throw new Error("Undefined opcode encountered: " . $opcode);
-                break;
-        }
-
-        return $opcode_cache;
-    }
 }
