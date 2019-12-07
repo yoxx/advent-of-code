@@ -19,7 +19,9 @@ class Y2019D5 extends Day
             }
 
             $output->write("P1: The result for input 1 is: ");
-            Y2019Utils::runOpcode($opcode_cache, $output, 1);
+            $int_code_computer = new IntCodeComputer();
+            $int_code_computer->setStartInput(1);
+            $int_code_computer->runOpcode($opcode_cache, $output);
 
             fclose($handle);
         } else {
@@ -36,19 +38,24 @@ class Y2019D5 extends Day
                 $opcode_cache = array_map('intval', explode(",",$line));
             }
 
+            $int_code_computer = new IntCodeComputer();
             if ($this->test) {
                 $output->writeln("P2-test - we expect 999 if input > 8, 1000 input === 8, 1001 input > 8");
                 $output->writeln("Running with 3");
-                Y2019Utils::runOpcode($opcode_cache, $output, 3);
+                $int_code_computer->setStartInput(3);
+                $int_code_computer->runOpcode($opcode_cache, $output);
 
                 $output->writeln("Running with 8");
-                Y2019Utils::runOpcode($opcode_cache, $output, 8);
+                $int_code_computer->setStartInput(8);
+                $int_code_computer->runOpcode($opcode_cache, $output);
 
                 $output->writeln("Running with 12");
-                Y2019Utils::runOpcode($opcode_cache, $output, 12);
+                $int_code_computer->setStartInput(12);
+                $int_code_computer->runOpcode($opcode_cache, $output);
             } else {
                 $output->write("P2: The diagnostic code is: ");
-                Y2019Utils::runOpcode($opcode_cache, $output, 5);
+                $int_code_computer->setStartInput(5);
+                $int_code_computer->runOpcode($opcode_cache, $output);
             }
 
             fclose($handle);

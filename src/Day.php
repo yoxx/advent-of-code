@@ -34,4 +34,46 @@ abstract class Day
     {
         $this->input_file = $input_file;
     }
+
+    public function getInputArray(bool $explode = false, string $delimiter = null): array
+    {
+        $output = [];
+        $handle = fopen($this->input_file, "rb");
+        if ($handle) {
+            while (($line = fgets($handle)) !== false) {
+                if ($explode) {
+                    $output[] = explode($delimiter, $line);
+                } else {
+                    $output[] = $line;
+                }
+            }
+
+            fclose($handle);
+        } else {
+            throw new \Error("Could not open file");
+        }
+
+        return $output;
+    }
+
+    public function getInputLine(bool $explode = false, ?string $delimiter = null): array
+    {
+        $output = [];
+        $handle = fopen($this->input_file, "rb");
+        if ($handle) {
+            while (($line = fgets($handle)) !== false) {
+                if ($explode) {
+                    $output = explode($delimiter, $line);
+                } else {
+                    $output[] = $line;
+                }
+            }
+
+            fclose($handle);
+        } else {
+            throw new \Error("Could not open file");
+        }
+
+        return $output;
+    }
 }

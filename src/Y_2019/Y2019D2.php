@@ -22,7 +22,8 @@ class Y2019D2 extends Day
             $opcode_cache[1] = 12;
             $opcode_cache[2] = 2;
 
-            $opcode_cache = Y2019Utils::runOpcode($opcode_cache, $output);
+            $int_code_computer = new IntCodeComputer();
+            [$opcode_cache, $output_code] = $int_code_computer->runOpcode($opcode_cache, $output);
 
             $output->writeln("P1: The result in \$opcode_cache is: " . $opcode_cache[0]);
 
@@ -50,7 +51,8 @@ class Y2019D2 extends Day
                     $opcode_cache[1] = $noun;
                     $opcode_cache[2] = $verb;
                     // Get the lenght
-                    $opcode_cache = Y2019Utils::runOpcode($opcode_cache, $output);
+                    $int_code_computer = new IntCodeComputer();
+                    [$opcode_cache, $output_code] = $int_code_computer->runOpcode($opcode_cache, $output);
 
                     if ($opcode_cache[0] === 19690720) {
                         break 2;

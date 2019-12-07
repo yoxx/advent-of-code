@@ -25,9 +25,7 @@ class Y2019D6 extends Day
                 }
             }
 
-            [$amount_of_orbits, $path] = $this->calculateAmountOfOrbits($orbits);
-
-            $output->writeln("P1: The total amount of direct and indirect orbits is: " . $amount_of_orbits);
+            $output->writeln("P1: The total amount of direct and indirect orbits is: " . $this->calculateAmountOfOrbits($orbits));
 
             fclose($handle);
         } else {
@@ -70,7 +68,7 @@ class Y2019D6 extends Day
             $santa_diff_path = array_intersect_key($santa_is_orbiting["path"], $im_orbiting["path"]);
 
             // Dont count ourselfs as objects
-            $output->writeln("P1: The total amount of steps to Santa is: " . (min($im_diff_path)-1 + min($santa_diff_path)-1));
+            $output->writeln("P2: The total amount of steps to Santa is: " . (min($im_diff_path)-1 + min($santa_diff_path)-1));
 
             fclose($handle);
         } else {
@@ -94,8 +92,8 @@ class Y2019D6 extends Day
                     if (!isset($orbits[$orbiting_object])) {
                         $chain_steps = $this->countUpTheChain($orbits, $object);
                         // Up the total orbit count
-                        $amount_of_orbits += $chain_steps;
-                        // unset the last one (we dont need it anymore
+                        $amount_of_orbits += $chain_steps["steps"];
+                        // unset the last one (we dont need it anymore)
                         unset($orbits[$object][$orbiting_object]);
                     }
                 }
