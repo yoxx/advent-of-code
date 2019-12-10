@@ -9,13 +9,25 @@ use yoxx\Advent\ConsoleCommands\RunAssignmentCommand;
 
 class IntCodeComputer
 {
-    protected bool $uses_output_machine = false;
     protected ?IntCodeComputer $output_machine = null;
+    protected bool $uses_output_machine = false;
+    protected bool $running = true;
+    protected bool $print_every_output = false;
     protected ?array $saved_state = null;
+    protected int $relative_base = 0;
     protected ?int $start_input = null;
     protected ?int $last_output = null;
-    protected bool $running = true;
     protected ?int $phase = null;
+
+    public function setPrintAllOutput(bool $bool): void
+    {
+        $this->print_every_output = $bool;
+    }
+
+    public function setRelativeBase(int $value): void
+    {
+        $this->relative_base = $value;
+    }
 
     public function setPhase(int $phase): void
     {
@@ -64,12 +76,12 @@ class IntCodeComputer
         }
         $instructionset_length = \count($opcode_cache);
         $output_code = null;
-        while ($opcode < $instructionset_length) {
+        while (true) {
             // First round means we want the input to be a phase so if set set that as as input
             if ($opcode === 0 && $this->phase !== null) {
-                $input = $this->phase;
+                $start_input = $this->phase;
             } else {
-                $input = $this->start_input;
+                $start_input = $this->start_input;
             }
             $jumped = false;
             $default_jump = 4;
@@ -79,33 +91,43 @@ class IntCodeComputer
             [$parsed_opcode, $c_mode, $b_mode, $a_mode] = $this->parseOpcode($opcode_cache[$opcode]);
             switch ($parsed_opcode) {
                 case 1: // add
-                    $opcode_cache[$opcode_cache[$opcode + 3]] = (($c_mode === 1)? $opcode_cache[$opcode + 1] : $opcode_cache[$opcode_cache[$opcode + 1]])
-                        + (($b_mode === 1)? $opcode_cache[$opcode + 2] : $opcode_cache[$opcode_cache[$opcode + 2]]);
+                    $param1 = $this->handleParameterMode($opcode_cache, $opcode, 1, $c_mode);
+                    $param2 = $this->handleParameterMode($opcode_cache, $opcode, 2, $b_mode);
+                    $target = $this->handleKeyMode($opcode_cache, $opcode, 3, $a_mode);
+                    $opcode_cache[$target] = $param1 + $param2;
                     break;
                 case 2: // multiply
-                    $opcode_cache[$opcode_cache[$opcode + 3]] = (($c_mode === 1)? $opcode_cache[$opcode + 1] : $opcode_cache[$opcode_cache[$opcode + 1]])
-                        * (($b_mode === 1)? $opcode_cache[$opcode + 2] : $opcode_cache[$opcode_cache[$opcode + 2]]);
+                    $param1 = $this->handleParameterMode($opcode_cache, $opcode, 1, $c_mode);
+                    $param2 = $this->handleParameterMode($opcode_cache, $opcode, 2, $b_mode);
+                    $target = $this->handleKeyMode($opcode_cache, $opcode, 3, $a_mode);
+                    $opcode_cache[$target] = $param1 * $param2;
                     break;
                 case 3: // store input
-                    if ($input === null) {
+                    if ($start_input === null) {
                         // We cannot store null this means we still need to recieve input, save state and wait till we are called again
                         $this->saveState($opcode, $opcode_cache);
                         break 2;
                     }
+                    // opcode and target constists of 2 parameters thus we alter our jump by 2
                     $amount_of_values -= 2;
-                    $opcode_cache[$opcode_cache[$opcode + 1]] = $input;
+                    $target = $this->handleKeyMode($opcode_cache, $opcode, 1, $c_mode);
+                    $opcode_cache[$target] = $start_input;
                     // We expect input ONCE thus we clear the input. (We should get new input or wait for it)
-                    $input = null;
+                    $start_input = null;
                     break;
-                case 4: // output input
+                case 4: // Output
+                    // opcode and target constists of 2 parameters thus we alter our jump by 2
                     $amount_of_values -= 2;
-                    $output_code = (($c_mode === 1) ? $opcode_cache[$opcode + 1] : $opcode_cache[$opcode_cache[$opcode + 1]]);
+                    $output_code = $this->handleParameterMode($opcode_cache,$opcode,1, $c_mode);
                     $this->last_output = $output_code;
+                    if ($this->print_every_output) {
+                        $output->writeln($output_code);
+                    }
                     $has_output_val = true;
                     break;
                 case 5: // Jump-if-true
-                    $param1 = (($c_mode === 1) ? $opcode_cache[$opcode + 1] : $opcode_cache[$opcode_cache[$opcode + 1]]);
-                    $param2 = (($b_mode === 1) ? $opcode_cache[$opcode + 2] : $opcode_cache[$opcode_cache[$opcode + 2]]);
+                    $param1 = $this->handleParameterMode($opcode_cache, $opcode, 1, $c_mode);
+                    $param2 = $this->handleParameterMode($opcode_cache, $opcode, 2, $b_mode);
                     if ($param1 !== 0) {
                         $opcode = $param2;
                         $jumped = true;
@@ -114,8 +136,8 @@ class IntCodeComputer
                     }
                     break;
                 case 6: // Jump-if-false
-                    $param1 = (($c_mode === 1) ? $opcode_cache[$opcode + 1] : $opcode_cache[$opcode_cache[$opcode + 1]]);
-                    $param2 = (($b_mode === 1) ? $opcode_cache[$opcode + 2] : $opcode_cache[$opcode_cache[$opcode + 2]]);
+                    $param1 = $this->handleParameterMode($opcode_cache, $opcode, 1, $c_mode);
+                    $param2 = $this->handleParameterMode($opcode_cache, $opcode, 2, $b_mode);
                     if ($param1 === 0) {
                         $opcode = $param2;
                         $jumped = true;
@@ -124,29 +146,33 @@ class IntCodeComputer
                     }
                     break;
                 case 7: // less than
-                    $param1 = (($c_mode === 1) ? $opcode_cache[$opcode + 1] : $opcode_cache[$opcode_cache[$opcode + 1]]);
-                    $param2 = (($b_mode === 1) ? $opcode_cache[$opcode + 2] : $opcode_cache[$opcode_cache[$opcode + 2]]);
+                    $param1 = $this->handleParameterMode($opcode_cache, $opcode, 1, $c_mode);
+                    $param2 = $this->handleParameterMode($opcode_cache, $opcode, 2, $b_mode);
+                    $target = $this->handleKeyMode($opcode_cache, $opcode, 3, $a_mode);
                     if ($param1 < $param2) {
-                        $opcode_cache[$opcode_cache[$opcode + 3]] = 1;
+                        $opcode_cache[$target] = 1;
 
                     } else {
-                        $opcode_cache[$opcode_cache[$opcode + 3]] = 0;
+                        $opcode_cache[$target] = 0;
                     }
                     break;
                 case 8: // equals
-                    $param1 = (($c_mode === 1) ? $opcode_cache[$opcode + 1] : $opcode_cache[$opcode_cache[$opcode + 1]]);
-                    $param2 = (($b_mode === 1) ? $opcode_cache[$opcode + 2] : $opcode_cache[$opcode_cache[$opcode + 2]]);
+                    $param1 = $this->handleParameterMode($opcode_cache, $opcode, 1, $c_mode);
+                    $param2 = $this->handleParameterMode($opcode_cache, $opcode, 2, $b_mode);
+                    $target = $this->handleKeyMode($opcode_cache, $opcode, 3, $a_mode);
                     if ($param1 === $param2) {
-                        $opcode_cache[$opcode_cache[$opcode + 3]] = 1;
+                        $opcode_cache[$target] = 1;
 
                     } else {
-                        $opcode_cache[$opcode_cache[$opcode + 3]] = 0;
+                        $opcode_cache[$target] = 0;
                     }
                     break;
+                case 9: // Modify relative base
+                    $amount_of_values -= 2;
+                    $param1 = $this->handleParameterMode($opcode_cache, $opcode, 1, $c_mode);
+                    $this->relative_base += $param1;
+                    break;
                 case 99:
-//                    if ($this->start_input !== null) {
-//                        $output->writeln("Halt program");
-//                    }
                     if ($output_code === null) {
                         $output_code = $this->last_output;
                     }
@@ -161,7 +187,7 @@ class IntCodeComputer
             }
 
             // If we have an output machine we treat every output as a signal thus we break off our programm untill we recieve a new input
-            if ($has_output_val && $this->uses_output_machine){
+            if ($has_output_val && $this->uses_output_machine) {
                 $this->saveState($opcode, $opcode_cache);
                 break;
             }
@@ -197,29 +223,68 @@ class IntCodeComputer
 
         $opcode_list = str_split((string) $opcode_instruction);
         $opcode_length = \count($opcode_list);
-        switch($opcode_length) {
-            case 1:
+        switch ($opcode_length) {
+            case 1: // OPCODE
                 // Just the opcode
                 $parsed_opcode = (int) $opcode_list[0];
                 break;
-            case 2:
+            case 2: // OPCODE
                 // Large opcode, currently only in use for 99
                 $parsed_opcode = (int) ($opcode_list[0] . $opcode_list[1]);
                 break;
-            case 3:
+            case 3: // C
                 $parsed_opcode = (int) ($opcode_list[1] . $opcode_list[2]);
                 $c_mode = (int) $opcode_list[0];
                 break;
-            case 4:
+            case 4: // B
                 $parsed_opcode = (int) ($opcode_list[2] . $opcode_list[3]);
                 $c_mode = (int) $opcode_list[1];
                 $b_mode = (int) $opcode_list[0];
                 break;
-            case 5:
+            case 5: // A
+                $parsed_opcode = (int) ($opcode_list[3] . $opcode_list[4]);
+                $c_mode = (int) $opcode_list[2];
+                $b_mode = (int) $opcode_list[1];
+                $a_mode = (int) $opcode_list[0];
+                break;
             default:
                 // we dont know what to do with this... best to throw an error
                 throw new Error("Unknown opcode length:" . $opcode_length);
         }
+
         return [$parsed_opcode, $c_mode, $b_mode, $a_mode];
+    }
+
+    private function handleParameterMode(array $opcode_cache, int $opcode, int $offset, int $mode): int
+    {
+        if ($mode === 1) {
+            $key = $opcode + $offset;
+            $input = $opcode_cache[$key];
+        } elseif ($mode === 2) {
+            $key = $opcode_cache[$opcode + $offset] + $this->relative_base;
+            $input = $opcode_cache[$key];
+        } else {
+            $key = $opcode_cache[$opcode + $offset];
+            $input = $opcode_cache[$key];
+        }
+
+        if ($input === null) {
+            $input = 0;
+        }
+
+        return $input;
+    }
+
+    private function handleKeyMode(array $opcode_cache, int $opcode, int $offset, $mode): int
+    {
+        if ($mode === 1) {
+            $key = $opcode + $offset;
+        } elseif ($mode === 2) {
+            $key = $this->relative_base + $opcode_cache[$opcode + $offset];
+        } else { // 0
+            $key = $opcode_cache[$opcode + $offset];
+        }
+
+        return $key;
     }
 }

@@ -19,8 +19,10 @@ class Y2019D2 extends Day
             }
 
             // Before running the program override values given by advent of code
-            $opcode_cache[1] = 12;
-            $opcode_cache[2] = 2;
+            if (!$this->test) {
+                $opcode_cache[1] = 12;
+                $opcode_cache[2] = 2;
+            }
 
             $int_code_computer = new IntCodeComputer();
             [$opcode_cache, $output_code] = $int_code_computer->runOpcode($opcode_cache, $output);
