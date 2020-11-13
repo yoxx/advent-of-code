@@ -12,7 +12,7 @@ class Y2018D10 extends Day
     protected $height = 0;
     protected $last_round = [];
 
-    public function run(OutputInterface $logger, int $part): void
+    public function run(OutputInterface $logger, int $part, bool $test): void
     {
         $formatted_input = $this->getFormattedInput($logger);
 
@@ -41,6 +41,9 @@ class Y2018D10 extends Day
             $logger->writeln("After " . ($count-1) . " seconds the text should be:");
         }
     }
+
+    public function runAssignment1(OutputInterface $output):void {}
+    public function runAssignment2(OutputInterface $output):void {}
 
     /**
      * Parse our input string to an array as follows

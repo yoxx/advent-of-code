@@ -12,7 +12,7 @@ class Y2018D5 extends Day
     /**
      * TODO perhaps do this assignment with str_replace since that seems faster
      */
-    public function run(OutputInterface $logger, int $part): void
+    public function run(OutputInterface $logger, int $part, bool $test): void
     {
         // Part 1
         // We get 1 polymer devided in several lines.
@@ -61,6 +61,9 @@ class Y2018D5 extends Day
             $logger->writeln("Lowest polymer length: " . $lowest . " without char: " . $lowest_char);
         }
     }
+
+    public function runAssignment1(OutputInterface $output):void {}
+    public function runAssignment2(OutputInterface $output):void {}
 
     public function checkArrayWithoutChar(array $params): void
     {

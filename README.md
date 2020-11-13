@@ -10,9 +10,9 @@ For more information about the advent of code see https://adventofcode.com
 
 ## Startup
 * This project uses Docker
-* To install composer packages run ```docker-compose run --rm composer install```
-* To run a command run ```docker-compose run --rm php-cli <your-command>``` to start the development enviroment
-* Simply run ```docker_php cli.php``` and start hacking
+* To install composer packages run ```docker-compose run --rm advent-composer install```
+* To run a command run ```docker-compose run --rm advent-php <your-command>``` to start the development enviroment
+* Simply run ```docker-compose run -rm advent-php src/cli.php``` and start hacking
   * ```run:day```
     * ```-y``` enter the year you want to execute a day from (default to current year)
     * ```-d``` enter the day you want to execute (default today)

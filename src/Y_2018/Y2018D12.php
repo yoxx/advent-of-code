@@ -9,7 +9,7 @@ use yoxx\Advent\Utils;
 
 class Y2018D12 extends Day
 {
-    public function run(OutputInterface $logger, int $part): void
+    public function run(OutputInterface $logger, int $part, bool $test): void
     {
         $formatted_input = $this->getFormattedInput($logger);
 
@@ -28,6 +28,9 @@ class Y2018D12 extends Day
             $logger->writeln("P2 The amount of plants after 50000000000 years is " . $output);
         }
     }
+
+    public function runAssignment1(OutputInterface $output):void {}
+    public function runAssignment2(OutputInterface $output):void {}
 
     private function getFormattedInput(OutputInterface $logger): array
     {

@@ -7,7 +7,7 @@ use yoxx\Advent\Day;
 
 class Y2018D2 extends Day
 {
-    public function run(OutputInterface $output, int $part): void
+    public function run(OutputInterface $output, int $part, bool $test): void
     {
         $input = [];
         $handle = fopen($this->input_file, "rb");
@@ -52,6 +52,9 @@ class Y2018D2 extends Day
             $output->writeln("Error reading line input from file");
         }
     }
+
+    public function runAssignment1(OutputInterface $output):void {}
+    public function runAssignment2(OutputInterface $output):void {}
 
     private function countIfXLetters(array $string_array, int $string_length, int $expected): bool
     {

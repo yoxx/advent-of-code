@@ -21,6 +21,7 @@ abstract class Day
                 $this->runAssignment2($output);
                 break;
             default:
+                $output->writeln("Running both part 1 and part 2");
                 $this->runAssignment1($output);
                 $this->runAssignment2($output);
         }

@@ -55,7 +55,7 @@ class Y2019D7 extends Day
             $int_code_computer_status = [];
             while(true) {
                 // if the last one is false everything is done break the loop
-                if ($int_code_computer_status[4] === false) {
+                if (!isset($int_code_computer_status[4]) || $int_code_computer_status[4] === false) {
                     break;
                 }
 

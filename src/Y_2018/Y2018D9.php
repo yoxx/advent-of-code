@@ -5,16 +5,15 @@ namespace yoxx\Advent\Y_2018;
 use Symfony\Component\Console\Output\OutputInterface;
 use yoxx\Advent\ConsoleCommands\RunAssignmentCommand;
 use yoxx\Advent\Day;
-use yoxx\Advent\Utils;
 
 class Y2018D9 extends Day
 {
-    protected $current_marble;
+    protected int $current_marble;
     /** @var Marble[] $marbles */
-    protected $marbles = [];
-    protected $player_scores = [];
+    protected array $marbles = [];
+    protected array $player_scores = [];
 
-    public function run(OutputInterface $logger, int $part): void
+    public function run(OutputInterface $logger, int $part, bool $test): void
     {
         $formatted_input = $this->getFormattedInput($logger);
 
@@ -39,6 +38,9 @@ class Y2018D9 extends Day
             $logger->writeln("Part 2: Player: " . $output["winning_player"] . " wins the game with a highscore of " . $output["highscore"]);
         }
     }
+
+    public function runAssignment1(OutputInterface $output):void {}
+    public function runAssignment2(OutputInterface $output):void {}
 
     private function getFormattedInput(OutputInterface $logger): array
     {

@@ -34,9 +34,15 @@ class Y2019D8 extends Day
             $count_of_two_digits = 0;
             foreach ($layer as $row) {
                 $values_count = array_count_values($row);
-                $count_of_zero_digits += $values_count[0];
-                $count_of_one_digits += $values_count[1];
-                $count_of_two_digits += $values_count[2];
+                if (isset($values_count[0])) {
+                    $count_of_zero_digits += $values_count[0];
+                }
+                if (isset($values_count[1])) {
+                    $count_of_one_digits += $values_count[1];
+                }
+                if (isset($values_count[2])) {
+                    $count_of_two_digits += $values_count[2];
+                }
             }
 
             if ($lowest_zero_count === null || $count_of_zero_digits < $lowest_zero_count) {
@@ -63,7 +69,6 @@ class Y2019D8 extends Day
         }
 
         $layers = $this->getLayers($image_set, $width, $height);
-
         $image = [];
         foreach ($layers as $layer) {
             foreach ($layer as $height_key => $image_height) {
@@ -96,24 +101,16 @@ class Y2019D8 extends Day
         }
     }
 
-    private
-    function getLayers(
-        $image_set, $width, $height
-    ): array {
-        $image_length = \count($image_set);
+    private function getLayers($image_set, $width, $height): array
+    {
+        $image_length = count($image_set);
         $index = 0;
         $layers = [];
-        $layers_zeroes_count = [];
         while ($index < $image_length) {
             $layer = [];
-            $cur_layer_index = \count($layers);
-            $layers_zeroes_count[$cur_layer_index] = 0;
             for ($cur_height = 0; $cur_height < $height; $cur_height++) {
                 $layer[$cur_height] = [];
                 for ($cur_width = 0; $cur_width < $width; $cur_width++) {
-                    if ($image_set[$index] === 0) {
-                        $layers_zeroes_count[$cur_layer_index]++;
-                    }
 
                     $layer[$cur_height][] = $image_set[$index];
                     $index++;

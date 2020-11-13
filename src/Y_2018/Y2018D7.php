@@ -9,7 +9,7 @@ use yoxx\Advent\Utils;
 
 class Y2018D7 extends Day
 {
-    public function run(OutputInterface $logger, int $part): void
+    public function run(OutputInterface $logger, int $part, bool $test): void
     {
         // First we read the instructions to an array [["A","B"],["C","D"]]
         $formatted_input = $this->getFormattedInput($logger);
@@ -20,6 +20,9 @@ class Y2018D7 extends Day
         $output2 = $this->calculateAmountOfTimeToComplete($formatted_input, $unique_array);
         $logger->writeln("The time it took to complete is: " . $output2["completion_time"] . " new order: " . $output2["order_string"]);
     }
+
+    public function runAssignment1(OutputInterface $output):void {}
+    public function runAssignment2(OutputInterface $output):void {}
 
     /**
      * Determines the order with multiple workersbut also the time to complete the work

@@ -9,7 +9,7 @@ use yoxx\Advent\Utils;
 
 class Y2018D13 extends Day
 {
-    public function run(OutputInterface $logger, int $part): void
+    public function run(OutputInterface $logger, int $part, bool $test): void
     {
         $formatted_input = $this->getFormattedInput($logger);
 
@@ -23,6 +23,9 @@ class Y2018D13 extends Day
         }
     }
 
+    public function runAssignment1(OutputInterface $output):void {}
+    public function runAssignment2(OutputInterface $output):void {}
+
     private function getFormattedInput(OutputInterface $logger): array
     {
         $original_input = [];
@@ -30,17 +33,7 @@ class Y2018D13 extends Day
         $handle = fopen($this->input_file, "rb");
         $count = 0;
         if ($handle) {
-            while (($line = fgets($handle)) !== false) {
-                if($count === 0) {
-                    $original_input["starting_input"] = str_split(explode(" ", trim($line))[2]);
-                    $count++;
-                } else {
-                    $rule = explode(" ", trim($line));
-                    if (\count($rule) > 1 && $rule[2] === "#") {
-                        $original_input["rules"][] = $rule[0];
-                    }
-                }
-            }
+            // TODO fix this puzzle
             fclose($handle);
         } else {
             $logger->writeln("Error reading line input from file");

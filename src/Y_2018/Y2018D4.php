@@ -7,7 +7,7 @@ use yoxx\Advent\Day;
 
 class Y2018D4 extends Day
 {
-    public function run(OutputInterface $output, int $part): void
+    public function run(OutputInterface $output, int $part, bool $test): void
     {
         // Part 1
         $original_input = $this->readAssignment($output);
@@ -26,6 +26,9 @@ class Y2018D4 extends Day
             $stats[1]["id"] . " * " . $stats[1]["minute_asleep_at_most_of_the_time"] . " = " . (int) $stats[1]["id"] * (int) $stats[1]["minute_asleep_at_most_of_the_time"] . "</info>");
 
     }
+
+    public function runAssignment1(OutputInterface $output):void {}
+    public function runAssignment2(OutputInterface $output):void {}
 
     /**
      * Read the puzzle input from the file

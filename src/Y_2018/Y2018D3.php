@@ -7,7 +7,7 @@ use yoxx\Advent\Day;
 
 class Y2018D3 extends Day
 {
-    public function run(OutputInterface $output, int $part): void
+    public function run(OutputInterface $output, int $part, bool $test): void
     {
         $all_input = [];
         $virtual_fabric = [];
@@ -36,6 +36,9 @@ class Y2018D3 extends Day
         $output->writeln("The only non overlapping ID is: " . $this->findFreeClaim($all_input, $virtual_fabric));
 
     }
+
+    public function runAssignment1(OutputInterface $output):void {}
+    public function runAssignment2(OutputInterface $output):void {}
 
     /** First we need to parse the input into viable numbers
      * Input like #1 @ 236,827: 24x17

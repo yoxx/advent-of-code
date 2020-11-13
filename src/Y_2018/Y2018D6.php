@@ -9,7 +9,7 @@ use yoxx\Advent\Utils;
 
 class Y2018D6 extends Day
 {
-    public function run(OutputInterface $logger, int $part): void
+    public function run(OutputInterface $logger, int $part, bool $test): void
     {
         $field = [];
         // First we read the array coordinates to an array [[x,y],[x,y]]
@@ -28,6 +28,9 @@ class Y2018D6 extends Day
             $logger->writeln("Amount of area points that can reach all positions under 10000 steps: " . $area_under_10000_steps);
         }
     }
+
+    public function runAssignment1(OutputInterface $output):void {}
+    public function runAssignment2(OutputInterface $output):void {}
 
     private function getFormattedInput(OutputInterface $logger): array
     {

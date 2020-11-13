@@ -9,7 +9,7 @@ use yoxx\Advent\Utils;
 
 class Y2018D8 extends Day
 {
-    public function run(OutputInterface $logger, int $part): void
+    public function run(OutputInterface $logger, int $part, bool $test): void
     {
         $formatted_input = $this->getFormattedInput($logger);
 
@@ -26,6 +26,9 @@ class Y2018D8 extends Day
             $logger->writeln("Root value: " . $root["metadata_value"]);
         }
     }
+
+    public function runAssignment1(OutputInterface $output):void {}
+    public function runAssignment2(OutputInterface $output):void {}
 
     private function getFormattedInput(OutputInterface $logger): array
     {
