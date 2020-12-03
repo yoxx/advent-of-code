@@ -1,25 +1,9 @@
-# Use the newest php version 8.0-dev YEAH
-FROM keinos/php8-jit
-# Install as ROOT
-USER root
-# Update our image packages
-RUN apk update
-# Install git
-RUN apk add git
-# Install zip and unzip for composer
-RUN apk add zip unzip
-# Get PHPIZE DEPS for runnning PECL on Alpine images
-RUN apk add --no-cache $PHPIZE_DEPS
-# Install Composer globally
-ENV COMPOSER_ALLOW_SUPERUSER 1
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-# Set the default work-dir
-WORKDIR /opt/project
-# Install X-Debug
-RUN pecl install xdebug-3.0.0beta1 && docker-php-ext-enable xdebug
-# Revert back to nobody
-USER nobody
-# Expose port 9000 for X-Debug
-EXPOSE 9000
+# Use the newest php version 8.0 YEAH
+FROM php:8.0-cli
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions xdebug
+COPY ./config/xdebug.ini $PHP_INI_DIR/conf.d/xdebug.ini
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+ENV PATH /root/.composer/vendor/bin:$PATH
 # Set the default work-dir
 WORKDIR /opt/project

@@ -10,6 +10,7 @@ For more information about the advent of code see https://adventofcode.com
 
 ## Startup
 * This project uses Docker
+* First build the docker-compose images: ```docker-compose build```
 * To install composer packages run ```docker-compose run --rm advent-composer install```
 * To run a command run ```docker-compose run --rm advent-php <your-command>``` to start the development enviroment
 * Simply run ```docker-compose run -rm advent-php src/cli.php``` and start hacking
@@ -25,4 +26,8 @@ For more information about the advent of code see https://adventofcode.com
 
 ### 2019
 * Setup docker enviroment to run the advent challenges
+* PHP 7.2
+
+### 2020
+* PHP8.0
 
