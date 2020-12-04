@@ -29,5 +29,5 @@ For more information about the advent of code see https://adventofcode.com
 * PHP 7.2
 
 ### 2020
-* PHP8.0
+* PHP8.0[]
 
