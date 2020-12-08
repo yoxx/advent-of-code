@@ -24,7 +24,7 @@ class Y2020D3 extends Day
 
         $tree_total = $t1 * $t2 * $t3 * $t4 * $t5;
 
-        $output->writeln("P1: amount of trees: " . $tree_total);
+        $output->writeln("P2: amount of trees multiplied: " . $tree_total);
     }
 
     private function checkSlope(array $input, int $right, int $down): int
