@@ -4,7 +4,6 @@ namespace yoxx\Advent\Y_2020;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use yoxx\Advent\Day;
-use yoxx\Advent\Y_2019\IntCodeComputer;
 
 class Y2020D6 extends Day
 {
