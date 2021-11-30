@@ -15,12 +15,19 @@ For more information about the advent of code see https://adventofcode.com
 * First build the docker-compose images: ```docker-compose build```
 * To install composer packages run ```docker-compose run --rm advent-composer install```
 * To run a command run ```docker-compose run --rm advent-php <your-command>``` to start the development environment
-* Simply run ```docker-compose run --rm advent-php src/cli.php``` and start hacking
+* Simply run ```docker-compose run --rm advent-php src/cli.php``` and start puzzling
   * ```run:day```
     * ```-y``` enter the year you want to execute a day from (default to current year)
     * ```-d``` enter the day you want to execute (default today)
     * ```-p``` enter the day-part you want to execute
     * ```-t``` run the test if a test file exists in input files
+* If you want to download the input files for yourself
+  * Copy the .env.example to .env ```cp .env.example .env```
+  * Login at adventofcode.com and retrieve the session value from your cookie
+  * Run the following command:
+    * ```input:download```
+      * ```-y``` enter the year you want to execute a day from (default to current year) it is a number ranging from 2000-2099 and not above our current year
+      * ```-d``` enter the day you want to execute (default today) it is a number ranging from 1-25
 
 ##Years
 ### 2018
@@ -38,4 +45,5 @@ For more information about the advent of code see https://adventofcode.com
 ### 2020
 * PHP 8.1
 * Updated composer packages and install composer/xdebug using [install-php-extensions](https://github.com/mlocati/docker-php-extension-installer)
+* Did a little cleanup
 
