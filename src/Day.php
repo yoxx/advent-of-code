@@ -43,7 +43,11 @@ abstract class Day
         if ($handle) {
             while (($line = fgets($handle)) !== false) {
                 if ($explode) {
-                    $output[] = explode($delimiter, $line);
+                    if ($delimiter) {
+                        $output[] = explode($delimiter, $line);
+                    } else {
+                        $output[] = str_split(trim($line));
+                    }
                 } else {
                     $output[] = $line;
                 }
