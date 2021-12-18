@@ -10,39 +10,64 @@ class Y2021D17 extends Day
     public function runAssignment1(OutputInterface $output): void
     {
         $finish_zone = $this->parseInput();
-        $min_x = 0;
-        $min_x_volocity = 0;
-        for ($i = 1; $min_x < $finish_zone["x"][0]; $i++) {
-            $min_x += $i;
-            $min_x_volocity = $i;
-        }
 
-        $running = true;
-        $max_y_pos = 0;
-        $init_y_veloc = 0;
-        while ($running) {
-            $x_pos = 0;
-            $y_pos = 0;
-            $x_veloc = $min_x_volocity;
-            $y_veloc = $init_y_veloc;
-            for ($steps = 0; $steps < $min_x_volocity; $steps++) {
-                [$x_pos, $y_pos, $x_veloc, $y_veloc] = $this->runStep($x_pos, $y_pos, $x_veloc, $y_veloc);
-                if ($y_pos > $max_y_pos) {
-                    $max_y_pos = $y_pos;
+        // Use the highest value x+y in our input as a max for our brute force.
+        $max_shooting_range = max(abs($finish_zone["x"][0]), abs($finish_zone["x"][1])) + max(abs($finish_zone["y"][0]), abs($finish_zone["y"][1]));
+        $highest_reached_y_of_all_shots = 0;
+        for ($x_init_veloc = 0; $x_init_veloc < $max_shooting_range;$x_init_veloc++) {
+            for ($y_init_veloc = -$max_shooting_range; $y_init_veloc < $max_shooting_range; $y_init_veloc++) {
+                $highest_y = 0;
+                $x_pos = 0;
+                $x_veloc = $x_init_veloc;
+                $y_pos = 0;
+                $y_veloc = $y_init_veloc;
+                while ($x_pos < $finish_zone["x"][1] && $y_pos > $finish_zone["y"][0]) {
+                    // Run our step
+                    [$x_pos, $y_pos, $x_veloc, $y_veloc] = $this->runStep($x_pos, $y_pos, $x_veloc, $y_veloc);
+                    // Update the highest value this round
+                    if ($y_pos > $highest_y) {
+                        $highest_y = $y_pos;
+                    }
+                    // Check if we finished?
+                    if ($x_pos >= $finish_zone["x"][0] && $x_pos <= $finish_zone["x"][1] && $y_pos >= $finish_zone["y"][0] && $y_pos <= $finish_zone["y"][1]) {
+                        // We are in our finish_zone check if this round had the highest y pos
+                        if ($highest_y > $highest_reached_y_of_all_shots) {
+                            $highest_reached_y_of_all_shots = $highest_y;
+                            break;
+                        }
+                    }
                 }
             }
-            if ($y_pos <= $finish_zone["y"][1] && $y_pos >= $finish_zone["y"][0] && $y_pos !== $max_y_pos) {
-                $running = false;
-            }
-            $init_y_veloc++;
         }
-        $output->writeln("P1: The solution is: " . $min_x_volocity . "," . $init_y_veloc - 1 . " highest step:" . $max_y_pos);
+        $output->writeln("P1: The solution is: " . $highest_reached_y_of_all_shots);
     }
 
     public function runAssignment2(OutputInterface $output): void
     {
-        [$value, $version_sum] = $this->parseBinaryString($this->parseInput());
-        $output->writeln("P2: The solution is: " . $value);
+        $finish_zone = $this->parseInput();
+
+        // Use the highest value x+y in our input as a max for our brute force.
+        $max_shooting_range = max(abs($finish_zone["x"][0]), abs($finish_zone["x"][1])) + max(abs($finish_zone["y"][0]), abs($finish_zone["y"][1]));
+        $valid_veloc = 0;
+        for ($x_init_veloc = 0; $x_init_veloc < $max_shooting_range;$x_init_veloc++) {
+            for ($y_init_veloc = -$max_shooting_range; $y_init_veloc < $max_shooting_range; $y_init_veloc++) {
+                $x_pos = 0;
+                $x_veloc = $x_init_veloc;
+                $y_pos = 0;
+                $y_veloc = $y_init_veloc;
+                while ($x_pos < $finish_zone["x"][1] && $y_pos > $finish_zone["y"][0]) {
+                    // Run our step
+                    [$x_pos, $y_pos, $x_veloc, $y_veloc] = $this->runStep($x_pos, $y_pos, $x_veloc, $y_veloc);
+                    // Check if we finished?
+                    if ($x_pos >= $finish_zone["x"][0] && $x_pos <= $finish_zone["x"][1] && $y_pos >= $finish_zone["y"][0] && $y_pos <= $finish_zone["y"][1]) {
+                        // We are in our finish_zone check if this round had the highest y pos
+                        $valid_veloc++;
+                        break;
+                    }
+                }
+            }
+        }
+        $output->writeln("P2: The solution is: " . $valid_veloc);
     }
 
     public function runStep(int $x_pos, int $y_pos, int $x_veloc, int $y_veloc): array
