@@ -12,6 +12,18 @@ class Utils
         ini_set('memory_limit', '1G');
     }
 
+    public static function memoryIntensive8G(): void
+    {
+        // This function is mempry intesive upping memory to 1G
+        ini_set('memory_limit', '8G');
+    }
+
+    public static function memoryIntensive16G(): void
+    {
+        // This function is mempry intesive upping memory to 1G
+        ini_set('memory_limit', '16G');
+    }
+
     /**
      * Function to retrieve values from our .env file
      */
