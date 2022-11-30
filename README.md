@@ -42,8 +42,11 @@ For more information about the advent of code see https://adventofcode.com
 * PHP 8.0
 * Made it to day 8
 
-### 2020
+### 2021
 * PHP 8.1
 * Updated composer packages and install composer/xdebug using [install-php-extensions](https://github.com/mlocati/docker-php-extension-installer)
 * Did a little cleanup
+
+### 2022
+* This year I will be trying AOC in Golang. The Go repo can be found here [AOC-GOLANg](https://github.com/yoxx/aoc-go)
 
