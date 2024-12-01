@@ -36,7 +36,7 @@ abstract class Day
         $this->input_file = $input_file;
     }
 
-    public function getInputArray(bool $explode = false, string $delimiter = null): array
+    public function getInputArray(bool $explode = false, ?string $delimiter = null): array
     {
         $output = [];
         $handle = fopen($this->input_file, "rb");

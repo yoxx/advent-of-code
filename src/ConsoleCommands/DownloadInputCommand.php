@@ -2,6 +2,7 @@
 
 namespace yoxx\Advent\ConsoleCommands;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -9,10 +10,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use yoxx\Advent\Utils;
 
+// the name of the command is what users type after "php bin/console"
+#[AsCommand(name: 'input:download')]
 class DownloadInputCommand extends Command
 {
-    // the name of the command (the part after "bin/console")
-    protected static $defaultName = 'input:download';
     private const DOWNLOAD_URL = "https://adventofcode.com/";
 
     protected function configure(): void

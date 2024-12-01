@@ -6,16 +6,17 @@ use DateTime;
 use DateTimeZone;
 use Error;
 use Exception;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use yoxx\Advent\Day;
 
+// the name of the command is what users type after "php bin/console"
+#[AsCommand(name: 'run:dayd')]
 class RunAssignmentCommand extends Command
 {
-    // the name of the command (the part after "bin/console")
-    protected static $defaultName = 'run:day';
     public const RUN_PART_ALL = 0;
     public const RUN_PART_1 = 1;
     public const RUN_PART_2 = 2;

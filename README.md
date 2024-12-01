@@ -50,3 +50,8 @@ For more information about the advent of code see https://adventofcode.com
 ### 2022
 * This year I will be trying AOC in Golang. The Go repo can be found here [AOC-GOLANg](https://github.com/yoxx/aoc-go)
 
+### 2024
+* PHP 8.4
+* Updated composer packages
+- TODO setup pipeline for testing and linting
+
