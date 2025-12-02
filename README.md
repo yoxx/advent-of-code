@@ -6,9 +6,9 @@ For more information about the advent of code see https://adventofcode.com
 
 ## General Info
 * This project is written in php
-  * Current php version 8.1
-* I like to do the advent puzzles for as long as I have time, usually it gets busier during the december month. 
-  This will result in me picking my battles and focussing on other things. I do it for fun anyways.
+  * Current php version 8.5
+* I like to do the advent puzzles for as long as I have time, usually it gets busier during the December month. 
+  This will result in me picking my battles and focussing on other things. I do it for fun anyway.
 
 ## Startup
 * This project uses Docker
@@ -54,4 +54,8 @@ For more information about the advent of code see https://adventofcode.com
 * PHP 8.4
 * Updated composer packages
 - TODO setup pipeline for testing and linting
+
+### 2025
+* PHP 8.5
+* Updated composer packages
 
