@@ -4,7 +4,7 @@ services:
     build:
       dockerfile: Dockerfile
       context: .
-    entrypoint: php -d xdebug.client_host=192.168.178.58 -d xdebug.client_port=9000 "${XDEBUG_USER_CONFIG:--d xdebug.discover_client_host=true}"
+    entrypoint: php -d xdebug.client_host=10.13.37.244 -d xdebug.client_port=9000 "${XDEBUG_USER_CONFIG:--d xdebug.discover_client_host=true}"
     environment:
       PHP_IDE_CONFIG: "serverName=advent-of-code"
     volumes:
